@@ -105,7 +105,7 @@ public class WebController {
 	    	
 	    	if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'T')
 	    	{
-	    		collection.add(new Movie(hold.substring(1, 5) , hold.substring(27 , hold.length() - 1), x));
+	    		collection.add(new Movie( hold.substring(27 , hold.length() - 1), hold.substring(1, 5) , x));
 	    		x++;
 	    		
 	    	}
@@ -114,8 +114,116 @@ public class WebController {
 
 		return collection;
 		
-	}
+	}//end getBestMovies()
 	
+	@RequestMapping(value = "/movies/bestMovie", produces = {"application/json"})
+	public Movie getBestMovieByYear(@RequestParam(value = "year") String parameter) throws FileNotFoundException,IOException
+	{
+		Vector<Movie> collection = new Vector<Movie>();
+		Vector<String> temp = new Vector<String>();
+		
+		String csvFile = "C://Users/james/Downloads/Oscar_Winner_data_csv.csv";  //enter filepath here
+	    InputStream in = new FileInputStream(csvFile);
+	    CSV csv = new CSV(true,',', in);
+	    
+	    temp = csv.getInfo();
+	    
+	    String hold;
+	    int x = 1;
+	    
+	    //load best movies into Vector
+	    
+	    for(int i = 0 ; i < temp.size(); i ++)
+	    {
+	    	hold = temp.get(i);
+	    	
+	    	if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'T')
+	    	{
+	    		collection.add(new Movie(hold.substring(27 , hold.length() - 1), hold.substring(1, 5) , x));
+	    		x++;
+	    		
+	    	}//end if
+	    		
+	    }//end for
+	    
+	    boolean found = false;
+	    int index = 0;
+	    String data;
+	    
+	    //find result and return it
+	    while(found==false && index < collection.size())
+	    {
+	    	data = collection.elementAt(index).getYear();
+	    	
+	    	if(data.equals(parameter))
+	    		found = true;
+	    	
+	    	else
+	    		index++;
+	    }//end while
+	      
+	    if(found == true)
+	    	return collection.elementAt(index);
+	    	    	
+	    else
+	    	return new Movie();
+	    
+	}//end getBestMovieByYear
+	
+	@RequestMapping(value = "/movies/bestMovie/{year}", produces = {"application/json"})
+	public Movie getBestMovieByYear2(@PathVariable(value = "year") String parameter ) throws FileNotFoundException,IOException
+	{
+		Vector<Movie> collection = new Vector<Movie>();
+		Vector<String> temp = new Vector<String>();
+		
+		String csvFile = "C://Users/james/Downloads/Oscar_Winner_data_csv.csv";  //enter filepath here
+	    InputStream in = new FileInputStream(csvFile);
+	    CSV csv = new CSV(true,',', in);
+	    
+	    temp = csv.getInfo();
+	    
+	    String hold;
+	    int x = 1;
+	    
+	    //load best movies into Vector
+	    
+	    for(int i = 0 ; i < temp.size(); i ++)
+	    {
+	    	hold = temp.get(i);
+	    	
+	    	if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'T')
+	    	{
+	    		collection.add(new Movie(hold.substring(27 , hold.length() - 1), hold.substring(1, 5) , x));
+	    		x++;
+	    		
+	    	}//end if
+	    		
+	    }//end for
+	    
+	    boolean found = false;
+	    int index = 0;
+	    String data;
+	    
+	    //find result and return it
+	    while(found==false && index < collection.size())
+	    {
+	    	data = collection.elementAt(index).getYear();
+	    	
+	    	if(data.equals(parameter))
+	    		found = true;
+	    	
+	    	else
+	    		index++;
+	    }//end while
+	      
+	    if(found == true)
+	    	return collection.elementAt(index);
+	    	    	
+	    else
+	    	return new Movie();
+		
+		
+	}
 	
 	
 	
