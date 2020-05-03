@@ -84,6 +84,11 @@ public class WebController {
 
 	}
 	
+	
+	//getBestMovies method. 
+	//getBestMovies returns a collection of every winner of "Best Picture" from the year 1962-2017
+	//Requirement for use: GET request for localhost:8080/movies/bestMovies
+	
 	@RequestMapping(value = "/movies/bestMovies" , produces = {"application/json"})
 	public Vector<Movie> getBestMovies() throws FileNotFoundException,IOException,IndexOutOfBoundsException
 	{
@@ -115,6 +120,11 @@ public class WebController {
 		return collection;
 		
 	}//end getBestMovies()
+	
+	//getBestMovieByYear()
+	//getBestMovieByYear returns the Best Picture winner for a particular year entered between 1962 and 2017 inclusive
+	//Requirement for use: GET request for localhost:8080/movies/bestMovie?year= DESIRED YEAR ENTERED BY USER
+	//If a value is entered outside of the range of 1962 and 2017 inclusive, blank movie data shall be returned.
 	
 	@RequestMapping(value = "/movies/bestMovie", produces = {"application/json"})
 	public Movie getBestMovieByYear(@RequestParam(value = "year") String parameter) throws FileNotFoundException,IOException
@@ -170,6 +180,13 @@ public class WebController {
 	    
 	}//end getBestMovieByYear
 	
+	
+	//getBestMovieByYear2
+	//getBestMovieByYear2 returns a movie object containing the data for the Best Picture winner for a particular year
+	//Requirements: GET request for localhost:8080/movies/bestMovies/YEAR ENTERED BY USER 
+	//If the year is between 1962 and 2017 inclusive, a movie object for that year is returned.
+	//If the year is outside of that range, a blank movie object is returned
+	
 	@RequestMapping(value = "/movies/bestMovie/{year}", produces = {"application/json"})
 	public Movie getBestMovieByYear2(@PathVariable(value = "year") String parameter ) throws FileNotFoundException,IOException
 	{
@@ -223,8 +240,102 @@ public class WebController {
 	    	return new Movie();
 		
 		
-	}
+	}//end getBestMovieByYear2
 	
+	//getBestMovieNomineesAll()
+	//getBestMovieNomineesAll() returns a collection of movie objects with data for all the nominees of Best Picture
+	//Requirements: GET request for localhost:8080/movies/allBestMovieNominees
+	
+	@RequestMapping(value = "/movies/allBestMovieNominees" , produces = {"application/json"})
+	public Vector<Movie> getBestMovieNomineesAll() throws FileNotFoundException,IOException,IndexOutOfBoundsException
+	{
+		Vector<Movie> collection = new Vector<Movie>();
+		Vector<String> temp = new Vector<String>();
+		
+		String csvFile = "C://Users/james/Downloads/Oscar_Winner_data_csv.csv";  //enter filepath here
+	    InputStream in = new FileInputStream(csvFile);
+	    CSV csv = new CSV(true,',', in);
+	    
+	    temp = csv.getInfo();
+	    
+	    String hold;
+	    int x = 1;
+	    
+	    for(int i = 0 ; i < temp.size(); i ++)
+	    {
+	    	hold = temp.get(i);
+	    	
+	    	if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'T')
+	    	{
+	    		collection.add(new Movie( hold.substring(27 , hold.length() - 1), hold.substring(1, 5) , x));
+	    		x++;
+	    		
+	    	}//end if
+	    	
+	    	else if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'F')
+	    	{
+	    		collection.add(new Movie( hold.substring(28 , hold.length() - 1), hold.substring(1, 5) , x));
+	    		x++;
+	    		
+	    	}//end else if
+	    		
+	    }
+
+		return collection;
+		
+	}//end getBestMovieNomineesAll
+	
+	//getBestMovieNomineesByYear()
+	//getBestMovieNomineesByYear returns a collection of movie objects with data from all of the Best Picture Nominees
+	//Requirements: GET request for localhost:8080/movies/BestMovieNominees/YEAR ENTERED BY USER
+	
+	@RequestMapping(value = "/movies/bestMovieNominees/{year}", produces = {"application/json"})
+	public Vector<Movie> getBestMovieNomineesByYear(@PathVariable(value = "year") String parameter ) throws FileNotFoundException,IOException
+	{
+		Vector<Movie> collection = new Vector<Movie>();
+		Vector<String> temp = new Vector<String>();
+		
+		String csvFile = "C://Users/james/Downloads/Oscar_Winner_data_csv.csv";  //enter filepath here
+	    InputStream in = new FileInputStream(csvFile);
+	    CSV csv = new CSV(true,',', in);
+	    
+	    temp = csv.getInfo();
+	    
+	    String hold;
+	    int x = 1;
+	    
+	    //load best movies into Vector
+	    
+	    for(int i = 0 ; i < temp.size(); i ++)
+	    {
+	    	hold = temp.get(i);
+	    	
+	    	if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'T')
+	    	{
+	    		collection.add(new Movie( hold.substring(27 , hold.length() - 1), hold.substring(1, 5) , x));
+	    		x++;
+	    		
+	    	}//end if
+	    	
+	    	else if(hold.charAt(7) == 'B' && hold.charAt(12)=='P' && hold.charAt(21) == 'F')
+	    	{
+	    		collection.add(new Movie( hold.substring(28 , hold.length() - 1), hold.substring(1, 5) , x));
+	    		x++;
+	    		
+	    	}//end else if
+	    		
+	    }//end for
+	    
+	    Vector<Movie> data = new Vector<Movie>();
+	    
+	    for(int i = 0; i < collection.size() ; i++)
+	    {
+	    	if( collection.elementAt(i).getYear().equals(parameter) )
+	    			data.add(collection.elementAt(i));
+	    }
+	      
+	    return data;
+	}//end getBestMovieNomineesByYear
 	
 	
 	
@@ -274,9 +385,7 @@ public class WebController {
 			   return this.id;
 		   }
 		   
-		} 
-	
-	
+		} 	
 	
 	
 	class CSV
