@@ -1,0 +1,55 @@
+Team S&B Movie Interface Software Service
+Scrum Master: Michael Burns
+Product Owner: Sean Hobson 
+Development Team: Alex Merical, Kannika Pho, Samantha Trevino, James Olesen
+
+
+**********************************INSTRUCTIONS********************************
+The Team S&B Movie Interface Software Service is a program designed to return
+information regarding Oscar winners for Best Picture. This is accomplished
+through a REST service that returns JSON objects containing the information
+for relevant movies.
+
+The following are all of the possible functions for the program. 
+Each are accessible by entering the following commands.
+
+1) localhost:8080/movies/bestMovies
+
+This returns a collection of all of the winners of Best Picture, in which 
+the Title, Year, and collection ID are returned.
+
+2) localhost:8080/movies/bestMovie?year=_____
+
+A 4-digit year must be placed in the blank space above. This returns a singleton
+for the winner of Best Movie for the year entered, in which 
+the Title, Year, and collection ID are returned. This works only for 
+numeric entries between 1962 and 2017 inclusive. Other entries will return
+a blank movie entry, showing no title, year, or ID. 
+
+3) localhost:8080/movies/bestMovie/_______
+
+A 4-digit year must be placed in the blank space above. This returns a singleton
+for the winner of Best Movie for the year entered, in which 
+the Title, Year, and collection ID are returned. This works only for 
+numeric entries between 1962 and 2017 inclusive. Other entries will return 
+a blank movie entry, showing no title, year, or ID. 
+
+4) localhost:8080/movies/allBestMovieNominees
+
+This returns a collection of all of the nominees for Best Picture ever.
+These will be in order of ID, which groups all years together. 
+The Title, Year, and collection ID are returned for each object.
+
+5) localhost:8080/movies/bestMovieNominees/____
+
+A 4-digit year must be placed in the blank space above. This returns 
+a collection of all of the Best Picture nominees for the year entered,
+in which the Title, Year, and ID are returned. This works only for
+numeric entries between 1962 and 2017 inclusive. Other entries will return
+a single, blank movie object.
+
+
+
+
+
+
